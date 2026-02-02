@@ -1,0 +1,54 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: todo-mysql
+    restart: unless-stopped
+    environment:
+      # Root user (for admin tasks)
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_password_change_me}
+
+      # App user + database (these reuse your NestJS env names)
+      MYSQL_DATABASE: ${DB_NAME:-todo_db}
+      MYSQL_USER: ${DB_USER:-todo_user}
+      MYSQL_PASSWORD: ${DB_PASS:-your_password_here}
+    ports:
+      # Expose MySQL to your Mac (Workbench + local Nest app)
+      - "${DB_PORT:-3306}:3306"
+    volumes:
+      # Persistent database storage
+      - mysql_data:/var/lib/mysql
+    networks:
+      - backend
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 15s
+
+  # Optional services (disabled by default).
+  # Start them with: docker compose --profile extras up -d
+  redis:
+    image: redis:7-alpine
+    container_name: my-crud-redis
+    profiles: ["extras"]
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - backend
+
+volumes:
+  mysql_data:
+  redis_data:
+
+networks:
+  backend:
+    driver: bridge
