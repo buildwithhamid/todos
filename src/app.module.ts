@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { RequestParserMiddleware } from './common/middleware/request-parser.middleware';
 import { TodoModule } from './todo/todo.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { TodoModule } from './todo/todo.module';
       }),
     }),
     TodoModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

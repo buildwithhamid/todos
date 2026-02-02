@@ -2,9 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { User } from '../users/user.entity';
 
 @Entity({ name: 'todos' })
 export class Todo {
@@ -14,7 +17,6 @@ export class Todo {
   @Column({ length: 255 })
   text: string;
 
-
   @Column({ type: 'text' })
   status: string;
   
@@ -23,6 +25,15 @@ export class Todo {
 
   @Column({ type: 'text' })
   description: string;
+
+  // Nullable for now so existing Todo endpoints keep working
+  // until we protect them with JWT and always set the authenticated user.
+  @Column({ type: 'int', nullable: true })
+  userId: number | null;
+
+  @ManyToOne(() => User, (user) => user.todos, { nullable: true })
+  @JoinColumn({ name: 'userId' })
+  user: User | null;
 
   @CreateDateColumn()
   createdAt: Date;
