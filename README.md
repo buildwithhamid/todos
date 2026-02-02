@@ -1,7 +1,5 @@
-<<<<<<< HEAD
 # todos
 A nestjs baased backend application
-=======
 <!-- <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
@@ -238,4 +236,3 @@ To delete the database data completely (dangerous):
 ```bash
 docker compose down -v
 ```
->>>>>>> f0bcb7b (basic-layout - implemented basic application structue)
